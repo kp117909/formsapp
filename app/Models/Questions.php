@@ -11,6 +11,7 @@ class Questions extends Model
         'question_text',
         'question_type',
         'is_required',
+        'question_order',
     ];
 
     public function survey()

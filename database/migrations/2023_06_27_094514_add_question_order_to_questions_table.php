@@ -16,6 +16,7 @@ return new class extends Migration
             $table->integer('question_order')->after('is_required')->nullable();
         });
 
+
         // Przypisanie wartości dla istniejących rekordów
         $questions = Questions::orderBy('id')->get();
         $questionCountBySurvey = [];

@@ -25,13 +25,33 @@ class OptionController extends Controller
 
     public function delete(Request $request)
     {
-        $request->validate([
-            'option_id' => 'required|exists:options,id',
-        ]);
+        $option = Options::findOrFail($request->input('id'));
+        if (!$option) {
+            return response()->json(['message' => 'Option not exists.'], 404);
+        }
 
-        $option = Options::findOrFail($request->input('option_id'));
+
         $option->delete();
 
-        return redirect()->back()->with('success', 'Option deleted successfully');
+        return response()->json(['message' => 'Option deleted.']);
+    }
+
+    public function edit(Request $request): \Illuminate\Http\JsonResponse
+    {
+        $option = Options::findOrFail($request->id);
+
+        if (!$option) {
+            return response()->json(['message' => 'Option not exists.'], 404);
+        }
+
+        $request->validate([
+            'option_text' => 'required',
+        ]);
+
+        $option->update([
+            'option_text' => $request->option_text,
+        ]);
+
+        return response()->json(['message' => 'Question deleted.']);
     }
 }

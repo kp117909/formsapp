@@ -38,9 +38,15 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::post('/questions.store', [QuestionsController::class, 'store'])->name('questions.store');
 
+    Route::get('/questions.edit', [QuestionsController::class, 'edit'])->name('questions.edit');
+
     Route::get('/questions.delete', [QuestionsController::class, 'delete'])->name('questions.delete');
 
     Route::get('/options.store', [OptionController::class, 'store'])->name('options.store');
+
+    Route::get('/options.delete', [OptionController::class, 'delete'])->name('options.delete');
+
+    Route::get('/options.edit', [OptionController::class, 'edit'])->name('options.edit');
 
 });
 

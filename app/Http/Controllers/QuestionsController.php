@@ -10,7 +10,7 @@ class QuestionsController extends Controller
     {
 
         $isRequired = $request->has('is_required') ? 1 : 0;
-
+        $query = Questions::where('survey_id', $request->survey_id)->max('question_order') + 1;
 
          $request->validate([
             'survey_id' => 'required|exists:surveys,id',
@@ -23,7 +23,7 @@ class QuestionsController extends Controller
             'question_text' => $request->question_text,
             'question_type' => $request->question_type,
             'is_required' => $isRequired,
-            'question_order' => Questions::where('survey_id', $request->survey_id)->max('question_order') + 1,
+            'question_order' => $query,
         ]);
 
 
@@ -49,6 +49,29 @@ class QuestionsController extends Controller
         foreach ($remainingQuestions as $remainingQuestion) {
             $remainingQuestion->decrement('question_order');
         }
+
+        return response()->json(['message' => 'Question deleted.']);
+    }
+
+    public function edit(Request $request): \Illuminate\Http\JsonResponse
+    {
+        $question = Questions::findOrFail($request->id);
+
+        if (!$question) {
+            return response()->json(['message' => 'Question not exists.'], 404);
+        }
+
+        dd($question);
+
+        $request->validate([
+            'question_text' => 'required',
+            'is_required' => 'nullable|boolean',
+        ]);
+
+        $question->update([
+            'question_text' => $request->question_text,
+            'is_required' => $request->is_required,
+        ]);
 
         return response()->json(['message' => 'Question deleted.']);
     }
