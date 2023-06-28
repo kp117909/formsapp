@@ -76,5 +76,10 @@ class QuestionsController extends Controller
         return response()->json(['message' => 'Question deleted.']);
     }
 
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
 }
 

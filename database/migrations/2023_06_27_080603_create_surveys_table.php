@@ -12,6 +12,8 @@ return new class extends Migration
             $table->increments('id');
             $table->string('survey_name');
             $table->string('survey_description');
+            $table->boolean('public');
+            $table->boolean("open");
             $table->timestamps();
         });
     }

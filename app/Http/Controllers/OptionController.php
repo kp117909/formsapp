@@ -52,6 +52,11 @@ class OptionController extends Controller
             'option_text' => $request->option_text,
         ]);
 
-        return response()->json(['message' => 'Question deleted.']);
+        return response()->json(['message' => 'Question Updated.']);
+    }
+
+    public function __construct()
+    {
+        $this->middleware('auth');
     }
 }

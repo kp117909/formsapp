@@ -17,14 +17,19 @@
                         </ul>
                     </div>
                 @endif
-                <div class="col-md-4 form-outline mb-4">
+                <div class="col-md-4 form-outline mb-2">
                     <input type="text" name = "survey_name" id="survey_name" class="form-control form-control-lg" value="{{ old('survey_name    ') }}" />
                     <label class="form-label" for="survey_name">{{__("Survey Name")}}</label>
                 </div>
 
-                <div class="col-md-4 form-outline mb-4">
+                <div class="col-md-4 form-outline mb-2">
                     <input type="text" name = "survey_description" id="survey_description" class="form-control form-control-lg" value="{{ old('survey_description') }}" />
                     <label class="form-label" for="survey_description">{{__("Survey Description")}}</label>
+                </div>
+
+                <div class="col-md-4 form-outline">
+                    <input type="text" name = "survey_url" id="survey_url" class="form-control form-control-lg" value="{{ old('survey_url') }}" />
+                    <label class="form-label" for="survey_url">{{__("Survey URL")}}</label>
                 </div>
             </div>
             <button class="btn btn-outline-primary btn-lg m-2" type = 'submit'>{{__("Create new Form")}}</button>
@@ -37,21 +42,44 @@
         <table class="table">
             <thead class="table-dark">
             <tr>
-                <td>ID</td>
+                <td>ENTER</td>
                 <td>Name</td>
                 <td>Description</td>
-                <td>Created At</td>
-                <td>Updated At</td>
+                <td>Public</td>
+                <td>Open</td>
+                <td>URL</td>
+{{--                <td>Created At</td>--}}
+{{--                <td>Updated At</td>--}}
+                <td>Action</td>
             </tr>
             </thead>
             <tbody>
             @foreach($surveys as $survey)
                 <tr>
-                    <td>{{$survey->id}} <a href = "{{ route('forms.index', $survey->id) }}"><i class="fa-solid fa-right-to-bracket" style="color: #511f1f;"></i></a></td>
+                    <td>[{{$survey->id}}] <a href = "{{ route('forms.index', $survey->id) }}"><i class="fa-solid fa-right-to-bracket bigger" style="color: #511f1f;"></i></a></td>
                     <td>{{$survey->survey_name}}</td>
                     <td>{{$survey->survey_description}}
-                    <td>{{$survey->created_at}}</td>
-                    <td>{{$survey->updated_at}}</td>
+                    <td>{{$survey->public}}</td>
+                    <td>{{$survey->open}}</td>
+                    <td><a target="_blank" href ="{{ config('app.url') }}{{__("/forms/")}}{{$survey->slug}}">{{ config('app.url') }}{{__("/forms/")}}{{$survey->slug}}</a></td>
+{{--                    <td>{{$survey->created_at}}</td>--}}
+{{--                    <td>{{$survey->updated_at}}</td>    --}}
+                    <td>
+                        <a data-url = "{{route("forms.delete")}}" data-id = "{{$survey->id}}" id = "surveyRemoveButton" class = "btn btn-danger btn-sm remove-button">
+                            <i class="fa-solid fa-trash"></i>
+                        </a>
+                        <a data-url = "{{route("forms.edit")}}"
+                           data-id = "{{$survey->id}}"
+                           id = "surveyEditButton"
+                           data-name = "{{$survey->survey_name}}"
+                           data-description = "{{$survey->survey_description}}"
+                           data-slug = "{{$survey->slug}}"
+                           data-public = "{{$survey->public}}"
+                           data-open = "{{$survey->open}}"
+                           class = "btn btn-primary btn-sm survey-edit-button">
+                            <i class="fa-solid fa-pen-to-square"></i>
+                        </a>
+                    </td>
                 </tr>
             @endforeach
             </tbody>

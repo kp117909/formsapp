@@ -7,3 +7,7 @@
     margin-bottom:1rem;
     margin-top: 0rem;
 }
+
+.bigger:hover {
+    transform: scale(1.2);
+}

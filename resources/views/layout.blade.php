@@ -30,12 +30,15 @@
                     <li class="breadcrumb-item">
                         <a href="{{route('auth.index')}}" class="btn btn-outline-light me-2">{{__("Admin Panel")}}</a>
                     </li>
-                    <li class="breadcrumb-item">
-                        <a href="#" class="btn btn-outline-light me-2" >{{__("Forms")}}</a>
-                    </li>
                     @endguest
+                    <li class="breadcrumb-item">
+                        <a href="{{route('guest.forms')}}" class="btn btn-outline-light me-2" >{{__("Forms")}}</a>
+                    </li>
                     @auth
-                        <li class ="breadcrumb-item">
+                    <li class="breadcrumb-item">
+                        <a href="{{route('admin.index')}}" class="btn btn-outline-light me-2">{{__("Admin Panel")}}</a>
+                    </li>
+                    <li class ="breadcrumb-item">
                         <a href="{{ route('auth.logout') }}" class="btn btn-outline-light me-2">{{__("Logout")}}</a>
                     </li>
                     @endauth

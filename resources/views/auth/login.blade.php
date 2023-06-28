@@ -11,7 +11,7 @@
             </div>
             <div class="col-md-7 col-lg-5 col-xl-5 offset-xl-1">
                 <div class="divider d-flex align-items-center my-4">
-                    <p class="text-center fw-bold mx-3 mb-0 text-muted">{{__("Administrator login Panel")}}</p>
+                    <p class="text-center fw-bold mx-3 mb-0 text-muted  ">{{__("Administrator login Panel")}}</p>
                 </div>
                 @if($errors->any())
                     <div class="alert alert-danger">
