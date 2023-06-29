@@ -26,7 +26,7 @@
             </ul>
         </div>
     @endif
-    <form action="{{ route('survey.submit') }}" method="POST">
+    <form id = "myForm" action="{{ route('survey.submit') }}" method="POST">
         <input type="hidden" name="survey_id" value="{{ $survey->id }}">
         @csrf
     @foreach($survey->questions as $question)
@@ -35,38 +35,58 @@
             <b>{{__("[Required]")}}</b>
             @endif
             @if($question->question_type === "text")
-                    <input type="hidden" name="type" value="text">
                 <div class="col-md-8 form-group">
                     <label class = "mb-4" for="question_{{$question->id}}">{{__("Question")}} {{$question->question_order}} - {{$question->question_text}}</label>
-                    <input type="text" name="answers[{{$question->id}}]" data-req = "{{$question->is_required}}" class="form-control" id="question_{{$question->id}}">
+                    <input type="text"
+                           name="answers[{{$question->id}}]"
+                           data-req = "{{$question->is_required}}"
+                           class="form-control"
+                           data-is-required="{{ $question->is_required ? '1' : '0' }}"
+                           data-id="{{ $question->id }}"
+{{--                           @if ($question->is_required) required @endif--}}
+                           id="question_{{$question->id}}">
                 </div>
             @elseif($question->question_type === "checkbox")
-                    <input type="hidden" name="type" value="checkbox">
                 <div class = "col-md-6">
                     <span >{{__("Question")}} {{$question->question_order}} - {{$question->question_text}}</span>
                 </div>
                 @foreach($question->options as $option)
-                    <div class="form-check m-3 ">
-                        <input type="checkbox" name="answers[{{ $question->id }}][{{ $option->id }}]" data-req = "{{$question->is_required}}" class="form-check-input" id="$option_{{$option->id}}">
-                        <label class="form-check-label" for="option_text_{{$option->id}}">{{$option->option_text}}</label>
+                    <div class="form-check m-3">
+                        <input type="checkbox"
+                               name="answers[{{ $question->id }}][{{ $option->id }}]"
+                               class="form-check-input"
+                               id="option_{{ $question->id }}_{{ $option->id }}"
+                               data-is-required="{{ $question->is_required ? '1' : '0' }}"
+                               data-id="{{ $question->id }}">
+                        <label class="form-check-label" for="option_{{ $question->id }}_{{ $option->id }}">{{ $option->option_text }}</label>
                     </div>
                 @endforeach
             @elseif($question->question_type ==="radio")
-                    <input type="hidden" name="type" value="radio">
                 <div class = "col-md-6">
                     <span >{{__("Question")}} {{$question->question_order}} - {{$question->question_text}}
                     </span>
                 </div>
                 @foreach($question->options as $option)
                     <div class="form-check m-3 ">
-                        <input type="radio" name="answers[{{$question->id}}]" value = "{{$option->id}}" data-req = "{{$question->is_required}}" class="form-check-input" id="question_{{$option->id}}">
+                        <input type="radio"
+                               name="answers[{{$question->id}}]"
+                               data-req = "{{$question->is_required}}"
+                               value = "{{$option->id}}"
+                               class="form-check-input"
+                               data-is-required="{{ $question->is_required ? '1' : '0' }}"
+                               data-id="{{ $question->id }}"
+                               id="option_{{$option->id}}">
                         <label class="form-check-label" for="option_text_{{$option->id}}">{{$option->option_text}}</label>
                     </div>
                 @endforeach
             @endif
+                <input type="hidden" name="type[{{ $question->id }}]" value="{{ $question->question_type }}">
         </div>
     @endforeach
-        <button type="submit" id = "submit-button">Wyślij</button>
+        <div class = "container">
+            <button type="submit" class = "btn btn-primary" id = "submit-button">Submit</button>
+            <span id = "error-text">Answer Required Questions!</span>
+        </div>
     </form>
     @endif
 @endsection

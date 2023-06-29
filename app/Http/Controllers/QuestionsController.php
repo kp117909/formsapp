@@ -61,8 +61,6 @@ class QuestionsController extends Controller
             return response()->json(['message' => 'Question not exists.'], 404);
         }
 
-        dd($question);
-
         $request->validate([
             'question_text' => 'required',
             'is_required' => 'nullable|boolean',

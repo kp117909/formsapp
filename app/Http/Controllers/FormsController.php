@@ -80,6 +80,14 @@ class FormsController extends Controller
         return response()->json(['message' => 'Form deleted.']);
     }
 
+    public function statistic($id): \Illuminate\Contracts\View\View|\Illuminate\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\Foundation\Application
+    {
+        $survey = Surveys::where('id', $id)->first();
+
+        return view('admin.statistic',['survey' => $survey]);
+    }
+
+
     public function __construct()
     {
         $this->middleware('auth');

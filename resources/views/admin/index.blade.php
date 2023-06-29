@@ -42,14 +42,12 @@
         <table class="table">
             <thead class="table-dark">
             <tr>
-                <td>ENTER</td>
+                <td>[ID] Enter</td>
                 <td>Name</td>
                 <td>Description</td>
                 <td>Public</td>
                 <td>Open</td>
                 <td>URL</td>
-{{--                <td>Created At</td>--}}
-{{--                <td>Updated At</td>--}}
                 <td>Action</td>
             </tr>
             </thead>
@@ -61,9 +59,7 @@
                     <td>{{$survey->survey_description}}
                     <td>{{$survey->public}}</td>
                     <td>{{$survey->open}}</td>
-                    <td><a target="_blank" href ="{{ config('app.url') }}{{__("/forms/")}}{{$survey->slug}}">{{ config('app.url') }}{{__("/forms/")}}{{$survey->slug}}</a></td>
-{{--                    <td>{{$survey->created_at}}</td>--}}
-{{--                    <td>{{$survey->updated_at}}</td>    --}}
+                    <td><a target="_blank" href ="{{ config('app.url') }}{{__("/guest/form/")}}{{$survey->slug}}">{{ config('app.url') }}{{__("/guest/form/")}}{{$survey->slug}}</a></td>
                     <td>
                         <a data-url = "{{route("forms.delete")}}" data-id = "{{$survey->id}}" id = "surveyRemoveButton" class = "btn btn-danger btn-sm remove-button">
                             <i class="fa-solid fa-trash"></i>
@@ -79,10 +75,14 @@
                            class = "btn btn-primary btn-sm survey-edit-button">
                             <i class="fa-solid fa-pen-to-square"></i>
                         </a>
+                        <a href = "{{route("forms.statistic", $survey->id)}}"  id = "surveyStatistic" class = "btn btn-warning btn-sm statistic-button">
+                            <i class="fa-solid fa-chart-pie"></i>
+                        </a>
                     </td>
                 </tr>
             @endforeach
             </tbody>
         </table>
+        {{ $surveys->links() }}
     </div>
 @endsection

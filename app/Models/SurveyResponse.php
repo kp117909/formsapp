@@ -12,16 +12,22 @@ class SurveyResponse extends Model
     protected $fillable = [
         'survey_id',
         'question_id',
+        'response_id',
         'answer',
     ];
 
     public function survey()
     {
-        return $this->belongsTo(Survey::class);
+        return $this->belongsTo(Surveys::class, 'survey_id', 'id');
     }
 
     public function question()
     {
-        return $this->belongsTo(Question::class);
+        return $this->belongsTo(Questions::class, 'question_id');
+    }
+
+    public function options()
+    {
+        return $this->hasMany(Options::class, 'id' , 'option_id');
     }
 }

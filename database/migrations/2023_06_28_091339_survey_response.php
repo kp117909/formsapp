@@ -11,16 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('survey_responses', function (Blueprint $table) {
-            $table->id();
-            $table->integer('survey_id');
-            $table->integer('question_id');
-            $table->text('answer');
-            $table->timestamps();
-
-            $table->foreign('survey_id')->references('id')->on('surveys')->onDelete('cascade');
-            $table->foreign('question_id')->references('id')->on('questions')->onDelete('cascade');
-        });
+        if (!Schema::hasTable('survey_responses')) {
+            Schema::create('survey_responses', function (Blueprint $table) {
+                $table->id();
+                $table->integer('survey_id');
+                $table->integer('question_id');
+                $table->text('answer');
+                $table->timestamps();
+            });
+        }
     }
 
     /**

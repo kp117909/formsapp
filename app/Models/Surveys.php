@@ -26,4 +26,9 @@ class Surveys extends Model
         return $this->hasMany(SurveyEdit::class, 'survey_id');
     }
 
+    public function responses()
+    {
+        return $this->hasMany(Responses::class, 'survey_id');
+    }
+
 }

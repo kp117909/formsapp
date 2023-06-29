@@ -1,6 +1,17 @@
 import './bootstrap';
 $(document).ready(function() {
 
+    $("#mySortableSurvey").sortable({
+        axis: "y",
+        handle: ".question-container",
+        update: function(event, ui) {
+            var questionContainers = $(this).find(".question-container");
+            questionContainers.each(function(index) {
+                $(this).attr("data-question-id", index + 1);
+            });
+        }
+    }).disableSelection();
+
     $('.remove-button').click(function (event) {
         event.preventDefault();
         var id = $(this).data('id');
@@ -268,60 +279,42 @@ $(document).ready(function() {
         });
     });
 
+    document.getElementById('myForm').addEventListener('submit', function(event) {
+        event.preventDefault();
 
-    var submitButton = document.getElementById('submit-button');
-    var answerInputs = document.querySelectorAll('input[name="answers[]"]');
+        var questions = document.querySelectorAll('[data-is-required="1"]');
+        var errorText = document.getElementById('error-text');
 
-    submitButton.addEventListener('click', function(event) {
-        // Sprawdzanie, czy wszystkie wymagane odpowiedzi zostały dodane
-        for (var i = 0; i < answerInputs.length; i++) {
-            var input = answerInputs[i];
-            var isRequired = input.getAttribute('data-req') === "1";
-            var questionType = input.closest('.row').querySelector('[name="question_type"]').value;
+        var isFormValid = true;
 
-            if (isRequired) {
-                if (questionType === "text" && !input.value) {
-                    event.preventDefault(); // Zablokowanie wysłania formularza
-                    alert('To pytanie jest wymagane. Dodaj odpowiedź.'); // Wyświetlenie komunikatu o błędzie
-                    return;
+        questions.forEach(function(question) {
+            var questionId = question.getAttribute('data-id');
+            console.log(question)
+            if (question.type === 'checkbox' || question.type === "radio") {
+                var checkboxes = document.querySelectorAll('input[name^="answers[' + questionId + ']"]:checked');
+                if (checkboxes.length === 0) {
+                    isFormValid = false;
+                    question.classList.add('error');
                 }
-
-                if (questionType === "checkbox" && !isAnyCheckboxChecked(input)) {
-                    event.preventDefault(); // Zablokowanie wysłania formularza
-                    alert('To pytanie jest wymagane. Wybierz co najmniej jedną opcję.'); // Wyświetlenie komunikatu o błędzie
-                    return;
-                }
-
-                if (questionType === "radio" && !isAnyRadioChecked(input)) {
-                    event.preventDefault(); // Zablokowanie wysłania formularza
-                    alert('To pytanie jest wymagane. Wybierz jedną opcję.'); // Wyświetlenie komunikatu o błędzie
-                    return;
+            } else if (question.type === 'text') {
+                var questionInput = document.querySelector('input[name="answers[' + questionId + ']"]');
+                var inputValue = questionInput.value.trim();
+                if (inputValue === '') {
+                    isFormValid = false;
+                    question.classList.add('error');
                 }
             }
+        });
+
+        if (!isFormValid) {
+            errorText.style.display = 'block';
+        } else {
+            errorText.style.display = 'none';
+            document.getElementById('myForm').submit();
         }
     });
 
-    function isAnyCheckboxChecked(input) {
-        var checkboxes = input.closest('.row').querySelectorAll('input[name="' + input.name + '"]');
-        for (var j = 0; j < checkboxes.length; j++) {
-            if (checkboxes[j].checked) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    function isAnyRadioChecked(input) {
-        var radios = input.closest('.row').querySelectorAll('input[name="' + input.name + '"]');
-        for (var j = 0; j < radios.length; j++) {
-            if (radios[j].checked) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-
 });
+
 
 

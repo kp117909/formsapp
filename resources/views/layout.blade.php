@@ -32,11 +32,14 @@
                     </li>
                     @endguest
                     <li class="breadcrumb-item">
-                        <a href="{{route('guest.forms')}}" class="btn btn-outline-light me-2" >{{__("Forms")}}</a>
+                        <a href="{{route('guest.forms')}}" class="btn btn-outline-light me-2" >{{__("Surveys")}}</a>
                     </li>
                     @auth
                     <li class="breadcrumb-item">
                         <a href="{{route('admin.index')}}" class="btn btn-outline-light me-2">{{__("Admin Panel")}}</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="{{route('response.index')}}" class="btn btn-outline-light me-2">{{__(" Completed Surveys")}}</a>
                     </li>
                     <li class ="breadcrumb-item">
                         <a href="{{ route('auth.logout') }}" class="btn btn-outline-light me-2">{{__("Logout")}}</a>
@@ -55,8 +58,11 @@
     <footer class="bg-white text-center text-lg-start mt-4">
     </footer>
 
+
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.0/mdb.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.1/themes/smoothness/jquery-ui.css">
 
 </html>

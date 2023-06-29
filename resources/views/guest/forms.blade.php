@@ -29,6 +29,7 @@
                 @endforeach
                 </tbody>
             </table>
+        {{ $surveys->links() }}
         </div>
 
     @endsection

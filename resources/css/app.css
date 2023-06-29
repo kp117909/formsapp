@@ -11,3 +11,18 @@
 .bigger:hover {
     transform: scale(1.2);
 }
+
+.error {
+    border: red 0.1rem solid;
+
+}
+
+#error-text{
+    display:none;
+    color:red;
+    font-weight: bolder;
+}
+
+/*.question-container{*/
+/*    border: #4a5568 0.1rem solid;*/
+/*}*/

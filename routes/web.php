@@ -7,6 +7,7 @@ use App\Http\Controllers\FormsController;
 use App\Http\Controllers\GuestController;
 use App\Http\Controllers\OptionController;
 use App\Http\Controllers\QuestionsController;
+use App\Http\Controllers\ResponseController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -49,6 +50,8 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::get('/forms/delete',  [FormsController::class, 'delete'])->name('forms.delete');
 
+    Route::get('/forms/statistic/{id}',  [FormsController::class, 'statistic'])->name('forms.statistic');
+
     Route::get('/forms/{slug}', [FormsController::class, 'show'])->name('forms.show');
 
     Route::post('/questions/store', [QuestionsController::class, 'store'])->name('questions.store');
@@ -62,5 +65,10 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/options/delete', [OptionController::class, 'delete'])->name('options.delete');
 
     Route::get('/options/edit', [OptionController::class, 'edit'])->name('options.edit');
+
+    Route::get('/response/index', [ResponseController::class, 'index'])->name('response.index');
+
+    Route::get('/response/edit/{id}', [ResponseController::class, 'edit'])->name('response.edit');
+
 });
 
