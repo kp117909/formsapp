@@ -16,6 +16,15 @@ class Surveys extends Model
         'open'
     ];
 
+    public static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($survey) {
+            $survey->responses()->delete();
+        });
+    }
+
     public function questions()
     {
         return $this->hasMany(Questions::class, 'survey_id')->orderBy('question_order');
@@ -29,6 +38,11 @@ class Surveys extends Model
     public function responses()
     {
         return $this->hasMany(Responses::class, 'survey_id');
+    }
+
+    public function surveyResponses()
+    {
+        return $this->hasMany(SurveyResponse::class, 'survey_id');
     }
 
 }

@@ -52,7 +52,7 @@
             </tr>
             </thead>
             <tbody>
-            @foreach($surveys as $survey)
+            @foreach($surveys->reverse()  as $survey)
                 <tr>
                     <td>[{{$survey->id}}] <a href = "{{ route('forms.index', $survey->id) }}"><i class="fa-solid fa-right-to-bracket bigger" style="color: #511f1f;"></i></a></td>
                     <td>{{$survey->survey_name}}</td>

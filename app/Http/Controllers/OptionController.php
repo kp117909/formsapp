@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\BlockedQuestions;
 use App\Models\Options;
 use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
 
 class OptionController extends Controller
 {
@@ -53,6 +55,27 @@ class OptionController extends Controller
         ]);
 
         return response()->json(['message' => 'Question Updated.']);
+    }
+
+    public function setDisabled(Request $request): RedirectResponse
+    {
+
+        $optionId = $request->input('option_id');
+        $blockedQuestions = $request->input('questionSelect');
+
+        BlockedQuestions::where('option_id', $optionId)->delete();
+
+        if($blockedQuestions != null){
+            foreach ($blockedQuestions as $questionId) {
+                BlockedQuestions::create([
+                    'option_id' => $optionId,
+                    'blocked_question_id' => $questionId
+                ]);
+            }
+        }
+
+        return redirect()->back();
+
     }
 
     public function __construct()

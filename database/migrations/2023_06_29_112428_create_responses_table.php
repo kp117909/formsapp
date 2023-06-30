@@ -11,13 +11,15 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('responses', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('response_id');
-            $table->unsignedBigInteger('survey_id');
+        if (!Schema::hasTable('responses')) {
+            Schema::create('responses', function (Blueprint $table) {
+                $table->id();
+                $table->unsignedBigInteger('response_id');
+                $table->unsignedBigInteger('survey_id');
 
-            $table->timestamps();
-        });
+                $table->timestamps();
+            });
+        }
     }
 
     /**

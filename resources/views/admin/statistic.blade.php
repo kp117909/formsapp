@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container">
-    <h1>History of answers for survey "{{ $survey->survey_name }}"</h1>
+    <h1>{{__("History of answers for survey ")}} "{{ $survey->survey_name }}"</h1>
 
     @foreach ($survey->questions as $question)
         <h3>{{$question->question_text }}</h3>

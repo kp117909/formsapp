@@ -28,10 +28,10 @@
                         <div class="question-container" data-question-id="{{ $question->id }}">
                             <div class="col-md-8 form-group">
                                 <label class = "mb-4" for="question_{{$question->id}}">{{__("Question")}} {{$question->question_order}} - {{$question->question_text}}
-                                    <a data-url = "{{route("questions.edit")}}" data-id = "{{$question->id}}" id = "editButton"  data-req = "{{$question->is_required}}" data-value = "{{$question->question_text}}" class = "btn btn-primary btn-sm edit-button">
+                                    <a data-url = "{{route("response.editQuestion")}}" data-id = "{{$survey->id}}" id = "editButton"  data-req = "{{$question->is_required}}" data-value = "{{$survey->answer}}" class = "btn btn-primary btn-sm edit-button-response">
                                         <i class="fa-solid fa-pen-to-square"></i>
                                     </a>
-                                    <a data-url = "{{route("questions.delete")}}" data-id = "{{$question->id}}" id = "removeButton" class = "btn btn-danger btn-sm remove-button">
+                                    <a data-url = "{{route("response.deleteQuestion")}}" data-id = "{{$survey->id}}" id = "removeButton" class = "btn btn-danger btn-sm remove-button">
                                         <i class="fa-solid fa-trash"></i>
                                     </a>
                                 </label>
@@ -42,32 +42,22 @@
                         <div class="question-container" data-question-id="{{ $question->id }}">
                             <div class = "col-md-6">
                                 <span >{{__("Question[Multi]")}} {{$question->question_order}} - {{$question->question_text}}
-                                    <a data-url = "{{route("options.store")}}" data-id = "{{$question->id}}" id = "addButton" class = "btn btn-success btn-sm add-button">
-                                        <i class="fa-solid fa-plus"></i>
-                                    </a>
-                                     <a data-url = "{{route("questions.edit")}}" data-id = "{{$question->id}}" id = "editButton"  data-value = "{{$question->question_text}}" data-req = "{{$question->is_required}}" class = "btn btn-primary btn-sm edit-button">
+                                    <a data-url = "{{route("response.editQuestionOption")}}" data-id = "{{$survey->id}}" id = "editButton"  data-req = "{{$question->is_required}}" class = "btn btn-primary btn-sm edit-button-response-select">
                                         <i class="fa-solid fa-pen-to-square"></i>
                                     </a>
-                                   <a data-url = "{{route("questions.delete")}}" data-id = "{{$question->id}}" id = "removeButton" class = "btn btn-danger btn-sm remove-button">
+                                    <a data-url = "{{route("response.deleteQuestion")}}" data-id = "{{$survey->id}}" id = "removeButton" class = "btn btn-danger btn-sm remove-button">
                                         <i class="fa-solid fa-trash"></i>
-                                   </a>
+                                    </a>
                                 </span>
                             </div>
                              @foreach($question->options as $option)
                                 <div class="form-check m-3 ">
                                     @if($option->id == $survey->option_id)
-                                        <input checked type="checkbox" name="option_text_{{$option->id}}" class="form-check-input" id="$option_{{$option->id}}">
+                                        <input checked type="checkbox"  onclick="onlyOne(this)" data-option-id = "{{$option->id}}" data-option-text = "{{$option->option_text}}" name="option_text_{{$survey->id}}" class="form-check-input" id="option_{{$survey->id}}">
                                     @else
-                                        <input type="checkbox" name="option_text_{{$option->id}}" class="form-check-input" id="$option_{{$option->id}}">
+                                        <input type="checkbox" onclick="onlyOne(this)"  data-option-id = "{{$option->id}}" data-option-text = "{{$option->option_text}}" name="option_text_{{$survey->id}}" class="form-check-input" id="option_{{$survey->id}}">
                                     @endif
-                                    <label class="form-check-label" for="option_text_{{$option->id}}">{{$option->option_text}}
-                                        <a data-url = "{{route("options.edit")}}" data-id = "{{$option->id}}" id = "editButton"  data-value = "{{$option->option_text}}" class = "btn btn-primary btn-sm edit-button-option">
-                                            <i class="fa-solid fa-pen-to-square"></i>
-                                        </a>
-                                        <a data-url = "{{route("options.delete")}}" data-id = "{{$option->id}}" id = "removeButton" class = "btn btn-danger btn-sm remove-button">
-                                            <i class="fa-solid fa-trash"></i>
-                                        </a>
-                                    </label>
+                                    <label class="form-check-label" for="option_text_{{$option->id}}">{{$option->option_text}}</label>
                                 </div>
                             @endforeach
                         </div>
@@ -75,27 +65,22 @@
                         <div class="question-container" data-question-id="{{ $question->id }}">
                             <div class = "col-md-6">
                                 <span >{{__("Question[Single]")}} {{$question->question_order}} - {{$question->question_text}}
-                                    <a data-url = "{{route("options.store")}}" data-id = "{{$question->id}}" id = "addButton" class = "btn btn-success btn-sm add-button">
-                                      <i class="fa-solid fa-plus"></i>
-                                    </a>
-                                    <a data-url = "{{route("questions.delete")}}" data-id = "{{$question->id}}" data-value = "{{$question->question_text}}" id = "removeButton" class = "btn btn-danger btn-sm remove-button">
-                                        <i class="fa-solid fa-trash"></i>
-                                    </a>
-                                    <a data-url = "{{route("questions.edit")}}" data-id = "{{$question->id}}" id = "editButton"  data-value = "{{$question->question_text}}" data-req = "{{$question->is_required}}" class = "btn btn-primary btn-sm edit-button">
+                                    <a data-url = "{{route("response.editQuestionOption")}}" data-id = "{{$survey->id}}" id = "editButton"  data-req = "{{$question->is_required}}" class = "btn btn-primary btn-sm edit-button-response-select">
                                         <i class="fa-solid fa-pen-to-square"></i>
+                                    </a>
+                                    <a data-url = "{{route("response.deleteQuestion")}}" data-id = "{{$survey->id}}" data-value = "{{$option->option_text}}" id = "removeButton" class = "btn btn-danger btn-sm remove-button">
+                                        <i class="fa-solid fa-trash"></i>
                                     </a>
                                 </span>
                             </div>
                             @foreach($question->options as $option)
                                 <div class="form-check m-3 ">
-                                    <input type="radio" name="option_text_single" class="form-check-input" id="question_{{$option->id}}">
+                                    @if($option->id == $survey->option_id)
+                                        <input checked type="radio" data-option-id = "{{$option->id}}" data-option-text = "{{$option->option_text}}" name="option_text_{{$survey->id}}" class="form-check-input" id="option_{{$survey->id}}">
+                                    @else
+                                        <input type="radio" data-option-id = "{{$option->id}}" data-option-text = "{{$option->option_text}}" name="option_text_{{$survey->id}}" class="form-check-input" id="option_{{$survey->id}}">
+                                    @endif
                                     <label class="form-check-label" for="option_text_{{$option->id}}">{{$option->option_text}}
-                                        <a data-url = "{{route("options.edit")}}" data-id = "{{$option->id}}" id = "editButton"  data-value = "{{$option->option_text}}" class = "btn btn-primary btn-sm edit-button-option">
-                                            <i class="fa-solid fa-pen-to-square"></i>
-                                        </a>
-                                        <a data-url = "{{route("options.delete")}}" data-id = "{{$option->id}}" id = "removeButton" class = "btn btn-danger btn-sm remove-button">
-                                            <i class="fa-solid fa-trash"></i>
-                                        </a>
                                     </label>
                                 </div>
                         @endforeach

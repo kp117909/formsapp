@@ -66,9 +66,19 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::get('/options/edit', [OptionController::class, 'edit'])->name('options.edit');
 
+    Route::post('/options/setDisabled', [OptionController::class, 'setDisabled'])->name('options.setDisabled');
+
     Route::get('/response/index', [ResponseController::class, 'index'])->name('response.index');
 
     Route::get('/response/edit/{id}', [ResponseController::class, 'edit'])->name('response.edit');
+
+    Route::get('/response/delete', [ResponseController::class, 'delete'])->name('response.delete');
+
+    Route::get('/response/deleteQuestion', [ResponseController::class, 'deleteQuestion'])->name('response.deleteQuestion');
+
+    Route::get('/response/editQuestion', [ResponseController::class, 'editQuestion'])->name('response.editQuestion');
+
+    Route::get('/response/editQuestionOption', [ResponseController::class, 'editQuestionOption'])->name('response.editQuestionOption');
 
 });
 

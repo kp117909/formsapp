@@ -23,6 +23,10 @@
     font-weight: bolder;
 }
 
+.select2 {
+    width:90%  !important;
+}
+
 /*.question-container{*/
 /*    border: #4a5568 0.1rem solid;*/
 /*}*/

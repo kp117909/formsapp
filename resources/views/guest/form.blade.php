@@ -32,7 +32,7 @@
     @foreach($survey->questions as $question)
         <div class = "row m-3">
             @if($question->is_required)
-            <b>{{__("[Required]")}}</b>
+                <b>{{__("[Required]")}}</b>
             @endif
             @if($question->question_type === "text")
                 <div class="col-md-8 form-group">
@@ -43,7 +43,6 @@
                            class="form-control"
                            data-is-required="{{ $question->is_required ? '1' : '0' }}"
                            data-id="{{ $question->id }}"
-{{--                           @if ($question->is_required) required @endif--}}
                            id="question_{{$question->id}}">
                 </div>
             @elseif($question->question_type === "checkbox")
@@ -71,6 +70,7 @@
                         <input type="radio"
                                name="answers[{{$question->id}}]"
                                data-req = "{{$question->is_required}}"
+                               data-disabled-questions = "{{$option->blockedQuestions}}"
                                value = "{{$option->id}}"
                                class="form-check-input"
                                data-is-required="{{ $question->is_required ? '1' : '0' }}"
@@ -84,8 +84,8 @@
         </div>
     @endforeach
         <div class = "container">
-            <button type="submit" class = "btn btn-primary" id = "submit-button">Submit</button>
-            <span id = "error-text">Answer Required Questions!</span>
+            <button type="submit" data-survey-id="{{$survey->id}}" class = "btn btn-primary" id = "submit-button">{{__("Submit")}}</button>
+            <span id = "error-text">{{__("Answer Required Questions!")}}</span>
         </div>
     </form>
     @endif

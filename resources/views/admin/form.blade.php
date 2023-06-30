@@ -15,33 +15,33 @@
             <div class="question">
                 <div class="row">
                     <div class="col-md-10 form-group">
-                        <label for="question1">Question</label>
+                        <label for="question1">{{__("Question")}}</label>
                         <input type="text" name="question_text" class="form-control" id="question1">
                         @error('question_text')
                         <span class="text-danger">{{ $message }}</span>
                         @enderror
                     </div>
                     <div class="col-md-2 form-group">
-                        <label for="question_type1">Question Type:</label>
+                        <label for="question_type1">{{__("Question Type:")}}</label>
                         <select name="question_type" class="form-control" id="question_type1">
-                            <option value="text">Text</option>
-                            <option value="checkbox">MultiCheckBox</option>
-                            <option value="radio">RadioSingleCheck</option>
+                            <option value="text">{{__("Text")}}</option>
+                            <option value="checkbox">{{__("MultiCheckBox")}}</option>
+                            <option value="radio">{{__("RadioSingleCheck")}}</option>
                         </select>
                         @error('question_type')
-                        <span class="text-danger">{{ $message }}</span>
+                            <span class="text-danger">{{ $message }}</span>
                         @enderror
                     </div>
                 </div>
                 <div class="form-group mt-2">
                     <div class="form-check">
                         <input type="checkbox" name="is_required" class="form-check-input" id="is_required1">
-                        <label class="form-check-label" for="is_required1">Is Required</label>
+                        <label class="form-check-label" for="is_required1">{{__("Is Required")}}</label>
                     </div>
                 </div>
             </div>
         </div>
-        <button type="submit" class="btn btn-primary" id="add-question">Add Question</button>
+        <button type="submit" class="btn btn-primary" id="add-question">{{__("Add Question")}}</button>
 
         @if (session('success'))
             <div class="alert alert-success mt-3">
@@ -105,11 +105,11 @@
                             <a data-url = "{{route("options.store")}}" data-id = "{{$question->id}}" id = "addButton" class = "btn btn-success btn-sm add-button">
                               <i class="fa-solid fa-plus"></i>
                             </a>
-                            <a data-url = "{{route("questions.delete")}}" data-id = "{{$question->id}}" data-value = "{{$question->question_text}}" id = "removeButton" class = "btn btn-danger btn-sm remove-button">
-                                <i class="fa-solid fa-trash"></i>
-                            </a>
                             <a data-url = "{{route("questions.edit")}}" data-id = "{{$question->id}}" id = "editButton"  data-value = "{{$question->question_text}}" data-req = "{{$question->is_required}}" class = "btn btn-primary btn-sm edit-button">
                                 <i class="fa-solid fa-pen-to-square"></i>
+                            </a>
+                            <a data-url = "{{route("questions.delete")}}" data-id = "{{$question->id}}" data-value = "{{$question->question_text}}" id = "removeButton" class = "btn btn-danger btn-sm remove-button">
+                                <i class="fa-solid fa-trash"></i>
                             </a>
                         </span>
                     </div>
@@ -123,6 +123,36 @@
                                 <a data-url = "{{route("options.delete")}}" data-id = "{{$option->id}}" id = "removeButton" class = "btn btn-danger btn-sm remove-button">
                                     <i class="fa-solid fa-trash"></i>
                                 </a>
+                                <a data-mdb-toggle="modal" data-mdb-target="#questionModal_{{$option->id}}" data-id="{{$option->id}}" id="editButton" data-value="{{$option->option_text}}" class="btn btn-dark btn-sm ">
+                                    <i class="fa-solid fa-filter"></i>
+                                </a>
+
+                                <div class="modal fade question-modal" id="questionModal_{{$option->id}}" tabindex="-1" role="dialog" aria-labelledby="questionModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                             <h5 class="modal-title" id="questionModalLabel">{{__("Choose Questions")}}</h5>
+                                            </div>
+                                            <form id="questionForm_{{$option->id}}" action="{{ route('options.setDisabled') }}" method="POST">
+                                                @csrf
+                                                <div class="modal-body">
+                                                    <select name="questionSelect[]" class="questionSelect form-control" multiple="multiple">
+                                                        @foreach($survey->questions as $questionSelect)
+                                                            @if($questionSelect->id != $question->id)
+                                                                <option value="{{$questionSelect->id}}">{{$questionSelect->question_text}}</option>
+                                                            @endif
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type = "button" class = "btn btn-secondary" data-dismiss="modal">{{__("Cancel")}}</button>
+                                                    <input  type = "hidden" name = "option_id" value = "{{$option->id}}">
+                                                    <button type="submit" data-option-id="{{$option->id}}" class="btn btn-primary send-button-disabledQuestion">Send</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
                             </label>
                         </div>
                 @endforeach

@@ -17,4 +17,9 @@ class Options extends Model
     {
         return $this->hasMany(SurveyResponse::class, 'option_id');
     }
+
+    public function blockedQuestions()
+    {
+        return $this->hasMany(BlockedQuestions::class, 'option_id');
+    }
 }

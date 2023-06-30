@@ -1,6 +1,26 @@
 import './bootstrap';
 $(document).ready(function() {
 
+    $('.questionSelect').select2();
+
+    $('.question-modal').on('shown.bs.modal', function() {
+        $(this).find('.questionSelect').select2({
+            dropdownParent: $(this)
+        });
+    });
+
+    // $('.question-modal').on('shown.bs.modal', function() {
+    //     $('.questionSelect').each(function() {
+    //         $(this).select2({
+    //             dropdownParent: $(this).closest('.question-modal')
+    //         });
+    //     });
+    // });
+
+    // $('.questionSelect').select2({
+    //     dropdownParent: $('.question-modal')
+    // });
+
     $("#mySortableSurvey").sortable({
         axis: "y",
         handle: ".question-container",
@@ -206,6 +226,7 @@ $(document).ready(function() {
     });
 
 
+
     $('.survey-edit-button').click(function (event) {
         var url = this.getAttribute('data-url');
         var name = this.getAttribute('data-name');
@@ -279,11 +300,199 @@ $(document).ready(function() {
         });
     });
 
+    window.onlyOne = onlyOne
+
+    function onlyOne(checkbox) {
+        console.log(checkbox.name)
+        console.log(checkbox.id)
+        var checkboxes = document.getElementsByName(checkbox.name)
+        checkboxes.forEach((item) => {
+            if (item !== checkbox) item.checked = false
+        })
+    }
+
+    $('.edit-button-response').click(function (event) {
+        var url = this.getAttribute('data-url');
+        var value = this.getAttribute('data-value');
+        Swal.fire({
+            title: 'Edit Response',
+            html:
+                '<input type="text" value = "'+value+'" id="questionText" class="swal2-input m-2" placeholder="New Response Text"><br>',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Save',
+            cancelButtonText: 'Cancel',
+            preConfirm: () => {
+                return {
+                    questionText: document.getElementById('questionText').value,
+                };
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                var questionText = result.value.questionText;
+                const questionId = this.getAttribute('data-id');
+                $.ajax({
+                    url: url,
+                    method: 'GET',
+                    data: {
+                        id: questionId,
+                        question_text: questionText,
+                    },
+                    success: function(response) {
+                        Swal.fire({
+                            title: 'Response updated',
+                            icon: 'success',
+                            text: 'Forms App',
+                            showConfirmButton: false
+                        });
+                        setTimeout(function () {
+                            location.reload();
+                        }, 1250);
+                    },
+                    error: function() {
+                        Swal.fire({
+                            title: 'Error',
+                            icon: 'error',
+                            text: 'Forms App'
+                        });
+                    }
+                });
+            }
+        });
+    });
+
+    $('.edit-button-response-select').click(function (event) {
+        var url = this.getAttribute('data-url');
+        var surveyId = this.getAttribute('data-id');
+        var checkboxes = document.getElementsByName('option_text_' + surveyId);
+        var selectedOptionId = 'null';
+        var selectedOptionText = '';
+
+        checkboxes.forEach(function(checkbox) {
+            if (checkbox.checked) {
+                selectedOptionId = checkbox.getAttribute('data-option-id');
+                selectedOptionText = checkbox.getAttribute('data-option-text');
+            }
+        });
+
+        Swal.fire({
+            title: 'Confirm your select',
+            html:
+                '<input required disabled type="text" value="' + selectedOptionText + '" id="questionText" class="swal2-input m-2" placeholder="New Response Text"><br>'+
+            '<input hidden disabled type="text" value="' + selectedOptionId + '" id="optionId" class="swal2-input m-2" placeholder="New Response Text"><br>',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Save',
+            cancelButtonText: 'Cancel',
+            preConfirm: () => {
+                return {
+                    selectedOption: document.getElementById('optionId').value,
+                };
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                var selectedOption = result.value.selectedOption;
+
+                $.ajax({
+                    url: url,
+                    method: 'GET',
+                    data: {
+                        id: surveyId,
+                        selectedOption: selectedOption,
+                    },
+                    success: function(response) {
+                        Swal.fire({
+                            title: 'Response updated',
+                            icon: 'success',
+                            text: 'Forms App',
+                            showConfirmButton: false
+                        });
+                        setTimeout(function () {
+                            location.reload();
+                        }, 1250);
+                    },
+                    error: function() {
+                        Swal.fire({
+                            title: 'Error',
+                            icon: 'error',
+                            text: 'Forms App'
+                        });
+                    }
+                });
+            }
+        });
+    });
+
+    $('.send-button-disabledQuestion').click(function () {
+        var selectedQuestions = $('.questionSelect').val();
+        var url = this.getAttribute('data-url');
+        var option_id = this.getAttribute('data-option-id');
+
+        $.ajax({
+            url: url,
+            type: 'GET',
+            data: {
+                option_id: option_id,
+                questions: selectedQuestions
+            },
+            success: function(response) {
+                Swal.fire({
+                    title: 'Updated',
+                    icon: 'success',
+                    text: 'Forms App',
+                    showConfirmButton: false
+                });
+                setTimeout(function () {
+                    location.reload();
+                }, 1250);
+            },
+            error: function() {
+                Swal.fire({
+                    title: 'Error',
+                    icon: 'error',
+                    text: 'Forms App'
+                });
+            }
+        });
+
+        $('#questionModal').modal('hide');
+    });
+
+    var radioButtons = document.querySelectorAll('input[type="radio"]');
+    var previousDisabledInputs = [];
+
+    radioButtons.forEach(function(radioButton) {
+        radioButton.addEventListener('click', function() {
+            var disabledQuestions = JSON.parse(this.getAttribute('data-disabled-questions'));
+
+            // Usuń stare elementy z atrybutem disabled
+            previousDisabledInputs.forEach(function(input) {
+                input.disabled = false;
+            });
+
+            if (disabledQuestions && Array.isArray(disabledQuestions)) {
+                disabledQuestions.forEach(function(disabledQuestion) {
+                    var questionId = disabledQuestion.blocked_question_id.toString();
+                    var inputs = document.querySelectorAll('input[data-id="' + questionId + '"]');
+
+                    inputs.forEach(function(input) {
+                        input.disabled = true;
+                    });
+
+                    previousDisabledInputs = inputs;
+                });
+            }
+        });
+    });
+
     document.getElementById('myForm').addEventListener('submit', function(event) {
         event.preventDefault();
 
         var questions = document.querySelectorAll('[data-is-required="1"]');
         var errorText = document.getElementById('error-text');
+        var surveyId = document.getElementById('submit-button').getAttribute('data-survey-id');
 
         var isFormValid = true;
 
@@ -310,9 +519,31 @@ $(document).ready(function() {
             errorText.style.display = 'block';
         } else {
             errorText.style.display = 'none';
-            document.getElementById('myForm').submit();
+            if (canFillSurvey(surveyId)) {
+                setCooldown(surveyId, 1 / 96);
+                document.getElementById('myForm').submit();
+            } else {
+                Swal.fire({
+                    title: 'The survey has a cooldown, please wait 15 minutes before refilling',
+                    icon: 'info',
+                    text: 'Forms App',
+                    showConfirmButton: false
+                });
+            }
         }
     });
+
+    function isCooldownActive(surveyId) {
+        return Cookies.get(`surveyCooldown_${surveyId}`) === 'true';
+    }
+
+    function setCooldown(surveyId, duration) {
+        Cookies.set(`surveyCooldown_${surveyId}`, 'true', { expires: duration });
+    }
+
+    function canFillSurvey(surveyId) {
+        return !isCooldownActive(surveyId);
+    }
 
 });
 
