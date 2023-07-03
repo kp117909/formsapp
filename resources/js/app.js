@@ -541,6 +541,15 @@ $(document).ready(function() {
         });
     });
 
+    $("a").hover(function() {
+        $(this).closest(".row").find("span").addClass("highlight");
+        $(this).closest(".row").find("label").addClass("highlight");
+    }, function() {
+        $(this).closest(".row").find("span").removeClass("highlight");
+        $(this).closest(".row").find("label").removeClass("highlight");
+    });
+
+
     document.getElementById('myForm').addEventListener('submit', function(event) {
         event.preventDefault();
 

@@ -44,6 +44,8 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/forms/index/{id}',  [FormsController::class, 'showSurvey'])->name('forms.index');
 
+    Route::get('/forms/newPage',  [FormsController::class, 'createNewPage'])->name('forms.pageNewForm');
+
     Route::post('/forms/store', [FormsController::class, 'store'])->name('forms.store');
 
     Route::get('/forms/edit',  [FormsController::class, 'edit'])->name('forms.edit');
@@ -54,13 +56,15 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/forms/slug/{slug}', [FormsController::class, 'showSlug'])->name('forms.shows');
 
+    Route::get('/forms/changeOrder',  [QuestionsController::class, 'changeOrder'])->name('questions.changeOrder');
+
+    Route::get('/forms/statistic/currentQuestion/{id}',  [QuestionsController::class, 'currentQuestion'])->name('forms.statistic.currentQuestion');
+
     Route::post('/questions/store', [QuestionsController::class, 'store'])->name('questions.store');
 
     Route::get('/questions/edit', [QuestionsController::class, 'edit'])->name('questions.edit');
 
     Route::get('/questions/delete', [QuestionsController::class, 'delete'])->name('questions.delete');
-
-    Route::get('/forms/changeOrder',  [QuestionsController::class, 'changeOrder'])->name('questions.changeOrder');
 
     Route::get('/options/store', [OptionController::class, 'store'])->name('options.store');
 
@@ -71,6 +75,8 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/options/setDisabled', [OptionController::class, 'setDisabled'])->name('options.setDisabled');
 
     Route::get('/response/index', [ResponseController::class, 'index'])->name('response.index');
+
+    Route::get('/response/current/{id}', [ResponseController::class, 'current'])->name('response.current');
 
     Route::get('/response/edit/{id}', [ResponseController::class, 'edit'])->name('response.edit');
 

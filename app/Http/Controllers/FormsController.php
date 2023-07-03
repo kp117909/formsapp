@@ -30,12 +30,14 @@ class FormsController extends Controller
         $request->validate([
             'survey_name' => 'required',
             'survey_description' => 'required',
-            'survey_url' => 'required',
+            'survey_url' => 'required|unique:surveys,slug',
         ]);
-
-         $survey = Surveys::create($request->all());
-
+         $survey = new Surveys();
+         $survey->survey_name = $request->input('survey_name');
+         $survey->survey_description = $request->input('survey_description');
          $survey->slug = Str::slug($request->input('survey_url'));
+         $survey->public = $request->has('public') ? 1 : 0;
+         $survey->open = $request->has('open') ? 1 : 0;
 
          $survey->save();
 
@@ -84,6 +86,10 @@ class FormsController extends Controller
         $survey = Surveys::where('id', $id)->first();
 
         return view('admin.statistic',['survey' => $survey]);
+    }
+
+    public function createNewPage(){
+        return view('admin.create_new_form');
     }
 
     public function __construct()

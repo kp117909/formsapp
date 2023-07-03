@@ -12,7 +12,9 @@ class AdminController extends Controller
 {
     public function index(){
 
-        $surveys = Surveys::query()->paginate(10);
+        $surveys = Surveys::query()
+            ->orderByDesc('created_at')
+            ->paginate(10);
 
         if (!Auth::check()) {
             return redirect()->route('auth.index');

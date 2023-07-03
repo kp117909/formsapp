@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\Responses;
 use App\Models\SurveyResponse;
+use App\Models\Surveys;
 use Illuminate\Http\Request;
 
 
@@ -12,9 +13,21 @@ class ResponseController extends Controller
 {
 
     public function index(){
-        $responses = Responses::with('survey')->paginate(10);
+        $responses = Responses::whereIn('id', function ($query) {
+            $query->selectRaw('MIN(id)')
+                ->from('responses')
+                ->groupBy('survey_id');
+        })
+            ->orderByDesc('created_at')
+            ->paginate(10);
 
         return view('admin.responses', ['completedSurveys' => $responses]);
+    }
+
+    public function current($id){
+        $current_responses = Responses::where('survey_id', $id)->orderByDesc('created_at')->paginate(10);
+
+        return view('admin.responses_current', ["completedSurveys" => $current_responses]);
     }
 
     public function edit($id){

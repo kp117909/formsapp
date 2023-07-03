@@ -97,6 +97,12 @@ class QuestionsController extends Controller
         return response()->json(['message' => 'Order Updated.']);
     }
 
+    public function currentQuestion($id){
+        $question = Questions::findOrFail($id);
+
+        return view('admin.current_statistic', ['question' => $question]);
+    }
+
     public function __construct()
     {
         $this->middleware('auth');

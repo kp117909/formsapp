@@ -14,7 +14,11 @@ class GuestController extends Controller
 {
     public function index(){
 
-        $surveys = Surveys::query()->paginate(10);
+        $surveys = Surveys::query()
+            ->where('public', 1)
+            ->orderByDesc('created_at')
+            ->paginate(10);
+
 
         return view('guest.forms',['surveys' => $surveys]);
     }
