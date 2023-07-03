@@ -54,7 +54,7 @@
         <h1 class="mb-3">{{__("Questions")}}</h1>
     </div>
     @foreach($survey->questions as $question)
-        <div class = "row m-3">
+        <div class = "question-list" data-survey-id = "{{$survey->id}}" data-url = "{{route("questions.changeOrder")}}" id = "sortable" class = "row m-3">
         @if($question->question_type === "text")
                 <div class="question-container" data-question-id="{{ $question->id }}">
                     <div class="col-md-8 form-group">
@@ -70,7 +70,8 @@
                     </div>
                 </div>
         @elseif($question->question_type === "checkbox")
-                <div class="question-container" data-question-id="{{ $question->id }}">
+            <div class = "question-container" data-question-id="{{ $question->id }}">
+                <div data-question-id="{{ $question->id }}">
                     <div class = "col-md-6">
                         <span >{{__("Question[Multi]")}} {{$question->question_order}} - {{$question->question_text}}
                             <a data-url = "{{route("options.store")}}" data-id = "{{$question->id}}" id = "addButton" class = "btn btn-success btn-sm add-button">
@@ -98,8 +99,10 @@
                         </div>
                     @endforeach
                 </div>
+            </div>
         @elseif($question->question_type ==="radio")
-                <div class="question-container" data-question-id="{{ $question->id }}">
+                <div class = "question-container" data-question-id="{{ $question->id }}">
+                <div data-question-id="{{ $question->id }}">
                     <div class = "col-md-6">
                         <span >{{__("Question[Single]")}} {{$question->question_order}} - {{$question->question_text}}
                             <a data-url = "{{route("options.store")}}" data-id = "{{$question->id}}" id = "addButton" class = "btn btn-success btn-sm add-button">
@@ -131,7 +134,7 @@
                                     <div class="modal-dialog" role="document">
                                         <div class="modal-content">
                                             <div class="modal-header">
-                                             <h5 class="modal-title" id="questionModalLabel">{{__("Choose Questions")}}</h5>
+                                             <h5 class="modal-title" id="questionModalLabel">{{__("Choose questions to disabled when checked")}}</h5>
                                             </div>
                                             <form id="questionForm_{{$option->id}}" action="{{ route('options.setDisabled') }}" method="POST">
                                                 @csrf
@@ -139,7 +142,13 @@
                                                     <select name="questionSelect[]" class="questionSelect form-control" multiple="multiple">
                                                         @foreach($survey->questions as $questionSelect)
                                                             @if($questionSelect->id != $question->id)
-                                                                <option value="{{$questionSelect->id}}">{{$questionSelect->question_text}}</option>
+                                                                @if($option->blockedQuestions->isEmpty())
+                                                                    <option value="{{$questionSelect->id}}">{{$questionSelect->question_text}}</option>
+                                                                @elseif($option->blockedQuestions->contains('blocked_question_id', $questionSelect->id))
+                                                                    <option value="{{$questionSelect->id}}" selected>{{$questionSelect->question_text}}</option>
+                                                                @else
+                                                                    <option value="{{$questionSelect->id}}">{{$questionSelect->question_text}}</option>
+                                                                @endif
                                                             @endif
                                                         @endforeach
                                                     </select>
@@ -156,6 +165,7 @@
                             </label>
                         </div>
                 @endforeach
+                </div>
                 </div>
         @endif
         </div>

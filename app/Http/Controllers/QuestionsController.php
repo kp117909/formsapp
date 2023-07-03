@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Questions;
+use App\Models\Surveys;
 use Illuminate\Http\Request;
 class QuestionsController extends Controller
 {
@@ -72,6 +73,28 @@ class QuestionsController extends Controller
         ]);
 
         return response()->json(['message' => 'Question deleted.']);
+    }
+
+    public function changeOrder(Request $request)
+    {
+        $survey_id = $request->surveyId;
+        $order = $request->questionOrder;
+
+        foreach ($order as $item) {
+            $id = $item['id'];
+            $position = $item['position'];
+
+            $question = Questions::where('id', $id)
+                ->where('survey_id', $survey_id)
+                ->first();
+
+            if ($question) {
+                $question->question_order = $position;
+                $question->save();
+            }
+        }
+
+        return response()->json(['message' => 'Order Updated.']);
     }
 
     public function __construct()

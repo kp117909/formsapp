@@ -36,9 +36,9 @@ Route::get('/auth/index', [AuthController::class, 'index'])->name('auth.index');
 Route::post('/auth/login', [AuthController::class, 'login'])->name('auth.login');
 
 
-Route::group(['middleware' => ['auth']], function () {
+Route::middleware(['auth'])->group(function () {
 
-    Route::get('/admin.index', [AdminController::class, 'index'])->name('admin.index');
+    Route::get('/admin.index',  [AdminController::class, 'index'])->name('admin.index');
 
     Route::get('/auth/logout',  [AuthController::class, 'logout'])->name('auth.logout');
 
@@ -52,13 +52,15 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::get('/forms/statistic/{id}',  [FormsController::class, 'statistic'])->name('forms.statistic');
 
-    Route::get('/forms/{slug}', [FormsController::class, 'show'])->name('forms.show');
+    Route::get('/forms/slug/{slug}', [FormsController::class, 'showSlug'])->name('forms.shows');
 
     Route::post('/questions/store', [QuestionsController::class, 'store'])->name('questions.store');
 
     Route::get('/questions/edit', [QuestionsController::class, 'edit'])->name('questions.edit');
 
     Route::get('/questions/delete', [QuestionsController::class, 'delete'])->name('questions.delete');
+
+    Route::get('/forms/changeOrder',  [QuestionsController::class, 'changeOrder'])->name('questions.changeOrder');
 
     Route::get('/options/store', [OptionController::class, 'store'])->name('options.store');
 
@@ -81,4 +83,5 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/response/editQuestionOption', [ResponseController::class, 'editQuestionOption'])->name('response.editQuestionOption');
 
 });
+
 

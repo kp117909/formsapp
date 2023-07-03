@@ -11,10 +11,9 @@ class FormsController extends Controller
 {
     public function index(){
         return view('admin.form');
-
     }
 
-    public function show($slug){
+    public function showSlug($slug){
         $survey = Surveys::where('slug', $slug)->first();
 
         return view('admin.form',['survey' => $survey]);
@@ -86,7 +85,6 @@ class FormsController extends Controller
 
         return view('admin.statistic',['survey' => $survey]);
     }
-
 
     public function __construct()
     {

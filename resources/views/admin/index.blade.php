@@ -42,13 +42,13 @@
         <table class="table">
             <thead class="table-dark">
             <tr>
-                <td>[ID] Enter</td>
-                <td>Name</td>
-                <td>Description</td>
-                <td>Public</td>
-                <td>Open</td>
-                <td>URL</td>
-                <td>Action</td>
+                <td>{{__("[ID] Enter")}}</td>
+                <td>{{__("Name")}}</td>
+                <td>{{__("Description")}}</td>
+                <td>{{__("Public")}}</td>
+                <td>{{__("Open")}}</td>
+                <td>{{__("URL")}}</td>
+                <td>{{__("Action")}}</td>
             </tr>
             </thead>
             <tbody>
