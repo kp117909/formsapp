@@ -55,7 +55,7 @@ class FormsController extends Controller
         $request->validate([
             's_name' => 'required',
             's_description' => 'required',
-            'slug' => 'required',
+            'slug' => 'required|unique:surveys,slug',
         ]);
 
         $survey->update([
