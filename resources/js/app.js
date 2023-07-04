@@ -549,6 +549,36 @@ $(document).ready(function() {
         $(this).closest(".row").find("label").removeClass("highlight");
     });
 
+    var sortIcon = $('.sort-icon');
+
+    $('.table').on('click', 'th:nth-child(2)', function() {
+        sortIcon.removeClass('fa-sort-up fa-sort-down');
+
+        var table = $(this).parents('table').eq(0);
+        var rows = table.find('tbody tr').toArray().sort(comparator($(this).index()));
+
+        this.asc = !this.asc;
+
+        if (!this.asc) {
+            rows = rows.reverse();
+            sortIcon.addClass('fa-sort-up');
+        } else {
+            sortIcon.addClass('fa-sort-down');
+        }
+
+        for (var i = 0; i < rows.length; i++) {
+            table.append(rows[i]);
+        }
+    });
+
+    function comparator(index) {
+        return function(a, b) {
+            var valA = parseInt($('td:nth-child(' + (index + 1) + ')', a).text());
+            var valB = parseInt($('td:nth-child(' + (index + 1) + ')', b).text());
+
+            return valA - valB;
+        };
+    }
 
     document.getElementById('myForm').addEventListener('submit', function(event) {
         event.preventDefault();

@@ -10,29 +10,50 @@
             @php
                 $printedOptions = [];
             @endphp
-            <ul>
-            @foreach ($question->answers as $response)
-                @if ($question->question_type === 'text')
-                    @if ($response->answer)
-                        <li>
-                            {{ $response->answer }}
-                        </li>
-                    @endif
-                @elseif ($question->question_type === 'checkbox' || $question->question_type === 'radio')
-                    @php
-                        $option = $question->options()->find($response->option_id);
-                    @endphp
-                    @if ($option && (!in_array($response->option_id, $printedOptions)))
-                        <li>
-                            {{ $option->option_text }}
-                            ({{ $question->answers()->where('option_id', $response->option_id)->count() }})
+    <div class="container mt-5 mb-5">
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <h4>{{__("Latest Answers")}}</h4>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>{{__("Answer")}}</th>
+                        <th>
+                            {{__("Number")}}
+                            @if ($question->question_type != 'text')
+                                <i class="sort-icon fa-solid fa-sort"></i>
+                            @endif
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach ($question->answers as $response)
+                        @if ($question->question_type === 'text')
+                            @if ($response->answer)
+                               <tr>
+                                   <td>{{ $response->answer }}</td>
+                                   <td> {{__("Empty")}}</td>
+                               </tr>
+                            @endif
+                        @else ($question->question_type === 'checkbox' || $question->question_type === 'radio')
                             @php
-                                $printedOptions[] = $response->option_id;
+                                $option = $question->options()->find($response->option_id);
                             @endphp
-                        </li>
-                    @endif
-                @endif
-            @endforeach
-        </ul>
+                            @if ($option && (!in_array($response->option_id, $printedOptions)))
+                                <tr>
+                                    <td>{{ $option->option_text }}</td>
+                                    <td>{{ $question->answers()->where('option_id', $response->option_id)->count() }}</td>
+                                </tr>
+                                @php
+                                    $printedOptions[] = $response->option_id;
+                                @endphp
+                            @endif
+                        @endif
+                    @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
 @endsection
